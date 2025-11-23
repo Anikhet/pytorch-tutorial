@@ -1,0 +1,11 @@
+[project]
+name = "racing-car-rl"
+version = "0.1.0"
+description = "Racing cars learning to navigate a track using genetic algorithms and neural networks"
+requires-python = ">=3.8"
+dependencies = [
+    "pygame>=2.5.0",
+    "numpy>=1.24.0",
+    "torch>=2.0.0",
+    "matplotlib>=3.7.0",
+]
