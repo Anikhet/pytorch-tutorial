@@ -86,7 +86,78 @@ This tutorial is structured as a progressive learning journey. Each notebook bui
     - Reverse Process (U-Net Denoising)
     - Generating images from noise
 
-**Total Estimated Time: 13-17 hours**
+14. **13_Reinforcement_Learning.ipynb** (~1.5 hours)
+    - RL fundamentals
+    - Policy gradients
+    - Q-learning with PyTorch
+    - Training agents in environments
+
+15. **14_Model_Deployment.ipynb** (~2 hours)
+    - TorchScript and ONNX export
+    - Batch vs Online inference patterns
+    - Modern serving frameworks (vLLM, TensorRT-LLM)
+    - FastAPI integration
+    - Production deployment strategies
+
+16. **15_Distributed_Training.ipynb** (~1.5 hours)
+    - Data Parallelism (DDP)
+    - Model Parallelism (FSDP)
+    - Multi-GPU training
+    - Distributed training best practices
+
+17. **16_Performance_Engineering.ipynb** (~1.5 hours)
+    - Mixed precision training (AMP)
+    - Gradient accumulation
+    - Performance profiling
+    - Memory optimization
+
+18. **17_Graph_Neural_Networks.ipynb** (~1.5 hours)
+    - GNN fundamentals
+    - Message passing networks
+    - Graph convolutions
+    - Applications
+
+19. **18_RAG_and_Agents.ipynb** (~2 hours)
+    - Retrieval Augmented Generation (RAG)
+    - Vector embeddings and search
+    - Building AI agents
+    - ReAct pattern implementation
+
+20. **19_RLHF_and_Alignment.ipynb** (~1.5 hours)
+    - Reinforcement Learning from Human Feedback
+    - Reward modeling
+    - PPO for LLM alignment
+    - Safety and alignment techniques
+
+21. **20_Quantization_and_Efficiency.ipynb** (~1.5 hours)
+    - INT8/INT4 quantization
+    - Model compression techniques
+    - Efficiency optimization
+    - Mobile deployment
+
+22. **21_Modern_LLM_Inference_Optimization.ipynb** (~2 hours) 🆕
+    - KV cache optimization and quantization
+    - Speculative decoding (2-3x speedup)
+    - PagedAttention and continuous batching
+    - vLLM and TensorRT-LLM deployment
+    - Production inference techniques
+
+23. **22_Streaming_ML_Inference.ipynb** (~2 hours) 🆕
+    - Real-time inference with Apache Kafka
+    - Feature stores (Feast integration)
+    - Training-serving skew prevention
+    - Embedded vs Enricher patterns
+    - Production monitoring
+
+24. **23_Production_Inference_Patterns.ipynb** (~2 hours) 🆕
+    - Feature/Training/Inference (FTI) pipelines
+    - Batch vs Online inference decision framework
+    - Cost optimization strategies (inference = 90% of costs!)
+    - Model monitoring and drift detection
+    - Safe deployment (Canary, Blue-Green, A/B testing)
+    - Production MLOps checklist
+
+**Total Estimated Time: 28-35 hours**
 
 ## 🚀 Getting Started
 
@@ -131,6 +202,7 @@ This tutorial is structured as a progressive learning journey. Each notebook bui
 
 By the end of this tutorial, you will be able to:
 
+**Core PyTorch Skills:**
 - ✅ Create and manipulate tensors in PyTorch
 - ✅ Understand automatic differentiation and gradients
 - ✅ Build neural networks using PyTorch's `nn.Module`
@@ -138,6 +210,8 @@ By the end of this tutorial, you will be able to:
 - ✅ Evaluate model performance
 - ✅ Apply PyTorch to real-world problems (regression and classification)
 - ✅ Save/load models and use GPU acceleration
+
+**Advanced Topics:**
 - ✅ Understand best practices for PyTorch development
 - ✅ Handle custom datasets and data pipelines
 - ✅ Optimize model performance with advanced techniques
@@ -145,6 +219,19 @@ By the end of this tutorial, you will be able to:
 - ✅ Fine-tune Large Language Models (LLMs) efficiently
 - ✅ Build Multimodal (Vision+Text) models like CLIP
 - ✅ Understand and implement Generative Diffusion models
+- ✅ Work with Graph Neural Networks
+- ✅ Build RAG systems and AI agents
+
+**Production ML & MLOps (2025 Standards):**
+- ✅ Optimize LLM inference with KV caching, speculative decoding, and continuous batching
+- ✅ Deploy models with modern frameworks (vLLM, TensorRT-LLM)
+- ✅ Build real-time streaming ML systems with Kafka
+- ✅ Prevent training-serving skew with feature stores
+- ✅ Choose between batch vs online inference correctly
+- ✅ Monitor models for drift and performance degradation
+- ✅ Optimize inference costs (90% of production ML expenses!)
+- ✅ Deploy safely with canary, blue-green, and A/B testing
+- ✅ Understand FTI (Feature/Training/Inference) pipeline architecture
 
 ## 💡 Tips for Success
 
