@@ -8,6 +8,11 @@ from guitar_solo import (
     GUITAR_SOLO, get_note_at_time, get_next_note_info,
     get_note_frequency, BEAT_DURATION, SOLO_DURATION
 )
+try:
+    import audio_synth
+    AUDIO_AVAILABLE = True
+except ImportError:
+    AUDIO_AVAILABLE = False
 
 
 class GuitarPlayer:
@@ -16,14 +21,16 @@ class GuitarPlayer:
     The player must learn to play the correct strings and frets at the right times.
     """
 
-    def __init__(self, network):
+    def __init__(self, network, audio_enabled=False):
         """
         Initialize guitar player with a neural network.
 
         Args:
             network: Neural network that controls the player
+            audio_enabled: Whether to play audio when notes are played
         """
         self.network = network
+        self.audio_enabled = audio_enabled and AUDIO_AVAILABLE
         self.reset()
 
     def reset(self):
@@ -137,6 +144,14 @@ class GuitarPlayer:
         """
         self.total_notes_attempted += 1
 
+        # Play audio if enabled
+        if self.audio_enabled:
+            try:
+                audio_synth.play_note(self.current_string, self.current_fret, duration=0.3)
+            except Exception as e:
+                # Silently ignore audio errors to not disrupt training
+                pass
+
         # Record the played note
         self.played_notes.append((
             self.current_string,
@@ -184,28 +199,37 @@ class GuitarPlayer:
         Calculate fitness score for this player.
 
         Fitness components:
+        - Time survived (baseline reward)
+        - Notes attempted (small reward for trying)
         - Correct notes played (main component)
         - Timing accuracy bonus
         - Note progression bonus
-        - Penalty for missed/wrong notes
+        - Small penalty for missed/wrong notes
         - Completion bonus
         """
-        # Base fitness: correct notes (worth 10 points each)
-        fitness = self.correct_notes * 10.0
+        # Baseline: reward for time survived (0-20 points)
+        time_ratio = min(self.time_beats / SOLO_DURATION, 1.0)
+        fitness = time_ratio * 20.0
+
+        # Small reward for attempting notes (1 point per attempt)
+        fitness += self.total_notes_attempted * 1.0
+
+        # Main reward: correct notes (worth 15 points each)
+        fitness += self.correct_notes * 15.0
 
         # Timing accuracy bonus (up to 5 points per correct note)
         fitness += self.timing_accuracy * 5.0
 
         # Progress bonus: reward getting through more of the solo
         progress_ratio = self.note_index / len(GUITAR_SOLO)
-        fitness += progress_ratio * 50.0
+        fitness += progress_ratio * 30.0
 
-        # Penalty for incorrect notes (wrong timing or wrong notes)
-        fitness -= self.notes_missed * 2.0
+        # Small penalty for incorrect notes (to prefer quality over quantity)
+        fitness -= self.notes_missed * 1.0
 
         # Big bonus for completing the solo
         if self.time_beats >= SOLO_DURATION:
-            fitness += 100.0
+            fitness += 50.0
 
         # Ensure fitness is non-negative
         fitness = max(0, fitness)

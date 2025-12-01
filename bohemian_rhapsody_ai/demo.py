@@ -9,6 +9,12 @@ import torch
 from guitar_player import GuitarPlayer
 from neural_network import GuitarNetwork
 from guitar_solo import SOLO_DURATION, BEAT_DURATION, NUM_NOTES, get_note_at_time
+try:
+    import audio_synth
+    AUDIO_AVAILABLE = True
+except ImportError:
+    AUDIO_AVAILABLE = False
+    print("Warning: Audio module not available")
 
 # Constants
 SCREEN_WIDTH = 1200
@@ -117,17 +123,26 @@ def demo_network(network_path):
     pygame.display.set_caption("Guitar Learning AI - Demo")
     clock = pygame.time.Clock()
 
-    # Create player
-    player = GuitarPlayer(network)
+    # Create player with audio enabled
+    player = GuitarPlayer(network, audio_enabled=True)
+
+    # Initialize audio synth if available
+    if AUDIO_AVAILABLE:
+        audio_synth.get_synth()  # Initialize and pre-cache sounds
+        print("🔊 Audio enabled!")
+    else:
+        print("🔇 Audio not available")
 
     # Demo loop
     running = True
     paused = False
+    audio_enabled = AUDIO_AVAILABLE
 
     print("\nDemo Controls:")
     print("  ESC: Quit")
     print("  R: Reset to beginning")
     print("  SPACE: Pause/Resume")
+    print("  M: Toggle audio on/off")
     print()
 
     while running:
@@ -146,6 +161,11 @@ def demo_network(network_path):
                 elif event.key == pygame.K_SPACE:
                     paused = not paused
                     print("Paused" if paused else "Resumed")
+                elif event.key == pygame.K_m:
+                    if AUDIO_AVAILABLE:
+                        player.audio_enabled = not player.audio_enabled
+                        audio_enabled = player.audio_enabled
+                        print("🔊 Audio ON" if audio_enabled else "🔇 Audio OFF")
 
         # Update player (if not paused)
         if not paused and player.alive:
@@ -209,8 +229,14 @@ def demo_network(network_path):
                  SCREEN_WIDTH // 2 - 100, SCREEN_HEIGHT - 105, 20)
 
         # Controls reminder
-        draw_text(screen, "ESC: Quit | R: Reset | SPACE: Pause",
+        draw_text(screen, "ESC: Quit | R: Reset | SPACE: Pause | M: Audio",
                  50, SCREEN_HEIGHT - 30, 18, (150, 150, 150))
+
+        # Audio indicator
+        if AUDIO_AVAILABLE:
+            audio_icon = "🔊" if audio_enabled else "🔇"
+            audio_color = (0, 255, 0) if audio_enabled else (150, 150, 150)
+            draw_text(screen, audio_icon, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 30, 24, audio_color)
 
         # Pause indicator
         if paused:

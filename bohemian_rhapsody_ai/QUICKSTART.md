@@ -47,7 +47,7 @@ Runs at 1x speed for better observation.
 
 ## Watch Your Trained Bot Perform
 
-After training, watch your bot play:
+After training, watch your bot play **with audio**:
 
 ```bash
 python3 demo.py
@@ -57,12 +57,16 @@ python3 demo.py
 - `ESC`: Quit
 - `R`: Reset to start
 - `SPACE`: Pause/Resume
+- `M`: Toggle audio on/off 🔊
 
 Shows:
 - Real-time fretboard with target notes (green circles)
 - Note timeline (past, present, future notes)
 - Performance statistics
 - Progress bar
+- **🎸 GUITAR AUDIO!** Hear each note as the bot plays
+
+The demo has audio **enabled by default** so you can hear your bot's performance!
 
 ## Quick Test (30 seconds)
 

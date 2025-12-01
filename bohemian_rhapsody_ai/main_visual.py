@@ -207,7 +207,8 @@ def run_generation(screen, clock, players):
         all_done = all(not player.alive or player.time_beats >= SOLO_DURATION
                        for player in players)
         if all_done:
-            break
+            # Generation complete - return fitness scores
+            return [player.get_fitness() for player in players]
 
         # Render
         screen.fill((15, 15, 25))
@@ -283,6 +284,11 @@ def save_fitness_plot(ga):
     """Save fitness evolution plot."""
     stats = ga.get_statistics()
 
+    # Only save if we have data
+    if len(stats['best_fitness_history']) == 0:
+        print("No fitness data to plot (no generations completed)")
+        return
+
     plt.figure(figsize=(10, 6))
     plt.plot(stats['best_fitness_history'], label='Best Fitness', linewidth=2)
     plt.plot(stats['avg_fitness_history'], label='Average Fitness', linewidth=2)
@@ -353,7 +359,15 @@ def main():
         stats = ga.get_statistics()
         print(f"\nFinal Statistics:")
         print(f"  Generations: {stats['generation']}")
-        print(f"  Best fitness: {stats['best_fitness']:.2f}")
+
+        if stats['best_fitness'] > -float('inf'):
+            print(f"  Best fitness: {stats['best_fitness']:.2f}")
+        else:
+            print(f"  Best fitness: N/A (no generations completed)")
+
+        if len(stats['avg_fitness_history']) > 0:
+            print(f"  Initial avg fitness: {stats['avg_fitness_history'][0]:.2f}")
+            print(f"  Final avg fitness: {stats['avg_fitness_history'][-1]:.2f}")
 
         pygame.quit()
 
