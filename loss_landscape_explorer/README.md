@@ -1,6 +1,22 @@
 # Loss Landscape Explorer
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![GPU](https://img.shields.io/badge/GPU-Optional-yellow)
+
 Interactive 3D visualization of loss landscapes with optimizer trajectory comparison. Watch SGD, Adam, RMSprop, and other optimizers navigate through valleys, saddle points, and local minima with glowing trajectory paths.
+
+## Learning Objectives
+
+By completing this tutorial, you will learn:
+
+- **Loss Landscapes**: Understand how loss functions create complex optimization surfaces
+- **Optimizer Behavior**: See how different optimizers navigate valleys, saddle points, and local minima
+- **Momentum Effects**: Visualize how momentum helps escape saddle points
+- **Adaptive Learning Rates**: Compare Adam/RMSprop's adaptive behavior vs fixed-LR SGD
+- **Local vs Global Minima**: Understand why initialization matters in non-convex optimization
+- **Gradient Descent Dynamics**: Watch optimization trajectories unfold step-by-step
 
 ## Features
 
@@ -110,10 +126,53 @@ Step-by-step animation of optimization progress. Best for understanding dynamics
 - **Local minima**: Compare SGD vs Adam on Rastrigin to see escape behavior
 - **Narrow valleys**: Rosenbrock shows why adaptive LR methods excel
 
-## Requirements
+## Hardware Requirements
 
-- Python 3.8+
-- PyTorch 2.0+
-- Streamlit 1.28+
-- Plotly 5.15+
-- NumPy 1.24+
+| Device | Landscape Computation | Visualization |
+|--------|----------------------|---------------|
+| CPU | ~1 second | Real-time |
+| M1/M2 Mac | ~0.5 seconds | Real-time |
+| CUDA GPU | ~0.1 seconds | Real-time |
+
+**Minimum Requirements**:
+- RAM: 2 GB
+- No GPU required
+- Browser with WebGL support (for Plotly)
+
+## Troubleshooting
+
+### "Streamlit app won't load"
+
+Port conflict or missing dependencies:
+```bash
+# Check if port is in use
+lsof -i :8501
+
+# Run on different port
+streamlit run app.py --server.port 8502
+```
+
+### "3D visualization is slow/choppy"
+
+Reduce grid resolution:
+```python
+config = LandscapeConfig(grid_size=50)  # Default is 80
+```
+
+### "Optimizer path looks wrong"
+
+Learning rate may be too high/low for the function:
+- Try different starting points
+- Adjust learning rate in the sidebar
+- Use auto-tuned LR settings
+
+### "Plot doesn't render"
+
+WebGL may be disabled:
+- Try a different browser (Chrome recommended)
+- Enable hardware acceleration in browser settings
+- Update graphics drivers
+
+## License
+
+MIT License - Part of the PyTorch Tutorial series.

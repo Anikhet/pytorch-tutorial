@@ -12,3 +12,6 @@ pillow>=9.0.0
 
 # Semantic direction finding
 scikit-learn>=1.2.0
+
+# Training progress
+tqdm>=4.65.0

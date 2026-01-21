@@ -1,6 +1,22 @@
 # Sketch-to-Image Diffusion Generator
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![GPU](https://img.shields.io/badge/GPU-Optional-yellow)
+
 A CPU-optimized diffusion model that generates images from hand-drawn sketches. Built from scratch for educational purposes, following the concepts from the PyTorch tutorial notebooks.
+
+## Learning Objectives
+
+By completing this tutorial, you will learn:
+
+- **Diffusion Models**: Understand the forward (noising) and reverse (denoising) process
+- **U-Net Architecture**: Build a skip-connection architecture for image-to-image tasks
+- **DDIM Sampling**: Implement faster deterministic sampling vs stochastic DDPM
+- **Conditional Generation**: Guide generation with sketch inputs via concatenation
+- **Noise Schedules**: Design variance schedules for stable training
+- **Time Embeddings**: Encode timestep information for the denoising network
 
 ## Features
 

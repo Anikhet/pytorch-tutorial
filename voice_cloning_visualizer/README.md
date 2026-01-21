@@ -1,6 +1,22 @@
 # Voice Cloning Feature Visualizer
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![GPU](https://img.shields.io/badge/GPU-Optional-yellow)
+
 Interactive visualization of audio features used in voice cloning and speech synthesis systems.
+
+## Learning Objectives
+
+By completing this tutorial, you will learn:
+
+- **Mel-Spectrograms**: Understand the primary representation for neural TTS models
+- **MFCCs**: Learn cepstral coefficients for speaker identification
+- **Pitch Extraction (F0)**: Extract fundamental frequency for prosody analysis
+- **Audio Feature Engineering**: Compute spectral centroid, bandwidth, and rolloff
+- **Time-Frequency Analysis**: Master STFT and its applications
+- **Voice Characteristics**: Understand what makes voices unique and how to capture it
 
 ## Overview
 
@@ -232,9 +248,70 @@ pitch, times = extractor.extract_pitch(audio, fmin=75, fmax=300)
 energy = extractor.extract_energy(audio)
 ```
 
+## Hardware Requirements
+
+| Device | Feature Extraction | Visualization |
+|--------|-------------------|---------------|
+| CPU | ~1 second/file | Real-time |
+| M1/M2 Mac | ~0.5 seconds/file | Real-time |
+
+**Minimum Requirements**:
+- RAM: 4 GB
+- No GPU required
+- Audio output device (optional, for playback)
+
+## Troubleshooting
+
+### "librosa import error"
+
+Install audio dependencies:
+```bash
+# macOS
+brew install ffmpeg
+
+# Ubuntu/Debian
+sudo apt-get install ffmpeg libsndfile1
+
+# Then reinstall librosa
+pip install --upgrade librosa soundfile
+```
+
+### "No sound output"
+
+Check audio device:
+```bash
+# Test pygame audio
+python -c "import pygame; pygame.mixer.init(); print('Audio OK')"
+```
+
+### "FileNotFoundError for audio file"
+
+Supported formats: WAV, MP3, FLAC, OGG
+```bash
+# Convert using ffmpeg
+ffmpeg -i input.m4a -ar 22050 output.wav
+```
+
+### "Pitch extraction returns NaN"
+
+Audio may be too quiet or have no voiced content:
+- Check audio levels (should not be silent)
+- Try different `fmin`/`fmax` for pitch range
+- Ensure audio contains speech (not just noise)
+
+### "Pygame visualization frozen"
+
+Close and restart:
+- Press `Q` or `ESC` to exit
+- Kill Python process if needed: `pkill -f demo.py`
+
 ## References
 
 - [Tacotron 2](https://arxiv.org/abs/1712.05884) - Natural TTS Synthesis
 - [VITS](https://arxiv.org/abs/2106.06103) - End-to-End Speech Synthesis
 - [librosa](https://librosa.org/) - Audio analysis library
 - [Speech Processing Book](https://web.stanford.edu/~jurafsky/slp3/) - Jurafsky & Martin
+
+## License
+
+MIT License - Part of the PyTorch Tutorial series.

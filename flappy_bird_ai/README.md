@@ -1,6 +1,22 @@
 # Flappy Bird AI - Genetic Algorithm
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![GPU](https://img.shields.io/badge/GPU-Optional-yellow)
+
 Watch AI birds learn to play Flappy Bird using **genetic algorithms** and **neural networks**! This project demonstrates neuroevolution, where neural network weights evolve over generations without traditional backpropagation.
+
+## Learning Objectives
+
+By completing this tutorial, you will learn:
+
+- **Neuroevolution**: Evolve neural network weights without gradients
+- **Tournament Selection**: Select parents based on competitive fitness
+- **Crossover Operators**: Combine parent networks to create offspring
+- **Mutation Strategies**: Add random perturbations for exploration
+- **Fitness Landscapes**: Understand how fitness guides evolution
+- **Game AI**: Apply neural networks to real-time decision making
 
 ## Overview
 

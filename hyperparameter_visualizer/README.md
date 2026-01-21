@@ -1,6 +1,22 @@
 # Hyperparameter Tuning Visualizer
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![GPU](https://img.shields.io/badge/GPU-Optional-yellow)
+
 An interactive tool for experimenting with neural network hyperparameters and watching training progress in real-time.
+
+## Learning Objectives
+
+By completing this tutorial, you will learn:
+
+- **Learning Rate Tuning**: Find optimal learning rates and understand their impact
+- **Batch Size Effects**: See how batch size affects training stability and generalization
+- **Optimizer Comparison**: Compare Adam, SGD, AdamW, and RMSprop behavior
+- **LR Schedulers**: Implement Step, Cosine, and Exponential decay strategies
+- **Overfitting Detection**: Recognize train/val divergence patterns
+- **Network Architecture**: Understand depth vs width trade-offs
 
 ## Features
 
@@ -161,6 +177,51 @@ hyperparameter_visualizer/
 2. **Watch for overfitting**: If val loss increases while train decreases
 3. **Learning rate is key**: Usually the most impactful hyperparameter
 4. **Be patient**: Some configurations need more epochs
+
+## Hardware Requirements
+
+| Device | Training (100 epochs) | Visualization |
+|--------|----------------------|---------------|
+| CPU | ~5 seconds | Real-time |
+| M1/M2 Mac | ~2 seconds | Real-time |
+| CUDA GPU | ~1 second | Real-time |
+
+**Minimum Requirements**:
+- RAM: 2 GB
+- No GPU required (small datasets)
+
+## Troubleshooting
+
+### "Loss is NaN"
+
+Learning rate too high:
+- Reduce LR by 10x (e.g., 0.1 → 0.01)
+- Try Adam optimizer (more stable than SGD)
+
+### "Model doesn't learn (flat loss)"
+
+Learning rate too low or architecture issue:
+- Increase LR by 10x
+- Add more layers for complex datasets (XOR needs depth)
+- Check activation function (try ReLU)
+
+### "High train/val gap (overfitting)"
+
+Model is memorizing, not generalizing:
+- Add weight decay (0.01 or 0.001)
+- Reduce model size (fewer layers/neurons)
+- Use more training data (increase samples)
+
+### "Gradio interface won't load"
+
+Port conflict:
+```bash
+# Kill existing process
+lsof -i :7861 | grep LISTEN | awk '{print $2}' | xargs kill
+
+# Or use different port
+python demo.py  # Will auto-select available port
+```
 
 ## License
 

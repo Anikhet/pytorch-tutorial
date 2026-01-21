@@ -1,8 +1,22 @@
 # Guitar Learning AI
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![GPU](https://img.shields.io/badge/GPU-Optional-yellow)
+
 A neural network that learns to play guitar solos using genetic algorithms! Watch as bots evolve over generations to master a rock-style guitar solo, learning the right strings, frets, and timing through natural selection.
 
-![Guitar Learning AI](https://img.shields.io/badge/AI-Guitar%20Learning-brightgreen) ![Python](https://img.shields.io/badge/Python-3.8%2B-blue) ![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+## Learning Objectives
+
+By completing this tutorial, you will learn:
+
+- **Neuroevolution**: Train neural networks without backpropagation using genetic algorithms
+- **Sequence Learning**: Model temporal dependencies in music note sequences
+- **Fitness Function Design**: Create multi-objective fitness (timing, pitch, string selection)
+- **Population Dynamics**: Implement selection pressure and genetic diversity
+- **Elitism**: Preserve top performers across generations
+- **Audio Synthesis**: Generate guitar sounds from neural network outputs
 
 ## Overview
 

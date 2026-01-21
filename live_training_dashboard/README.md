@@ -1,6 +1,22 @@
 # Live Training Dashboard
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![GPU](https://img.shields.io/badge/GPU-Optional-yellow)
+
 A real-time neural network training visualization dashboard built with Streamlit and Plotly.
+
+## Learning Objectives
+
+By completing this tutorial, you will learn:
+
+- **Training Monitoring**: Track loss, accuracy, and gradients in real-time
+- **Gradient Flow Analysis**: Detect exploding and vanishing gradients
+- **Weight Distributions**: Understand how weights evolve during training
+- **Overfitting Detection**: Recognize train/val divergence patterns
+- **Learning Rate Effects**: Visualize how LR schedules impact training
+- **PyTorch Hooks**: Use forward and backward hooks for model introspection
 
 ## Features
 

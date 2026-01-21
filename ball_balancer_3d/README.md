@@ -1,8 +1,22 @@
 # 3D Ball Balancing Robot with Genetic Algorithms
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![GPU](https://img.shields.io/badge/GPU-Optional-yellow)
+
 A **3D physics simulation** where a robot learns to balance a ball on a tilting platform using neural networks and genetic algorithms. Built with **PyBullet** for realistic 3D physics!
 
-![3D Visualization](https://img.shields.io/badge/3D-PyBullet-blue) ![AI](https://img.shields.io/badge/AI-Genetic_Algorithm-green) ![Physics](https://img.shields.io/badge/Physics-Realistic-orange)
+## Learning Objectives
+
+By completing this tutorial, you will learn:
+
+- **Genetic Algorithms**: Implement selection, crossover, and mutation for neuroevolution
+- **Physics Simulation**: Use PyBullet for realistic 3D physics with gravity and friction
+- **Continuous Control**: Train neural networks for continuous action spaces (tilt angles)
+- **Fitness Function Design**: Create reward signals that guide evolution toward desired behavior
+- **State Representation**: Design input features from sensor readings (position, velocity)
+- **Real-time Visualization**: Render learning progress with 3D graphics
 
 ## What Is This?
 

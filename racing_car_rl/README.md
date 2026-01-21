@@ -1,6 +1,22 @@
 # Racing Car Reinforcement Learning with Genetic Algorithm
 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-red)
+![License](https://img.shields.io/badge/License-MIT-green)
+![GPU](https://img.shields.io/badge/GPU-Optional-yellow)
+
 A deep learning project where autonomous cars learn to navigate a race track using neural networks and genetic algorithms. Watch as cars evolve over generations, learning to complete the track without crashing!
+
+## Learning Objectives
+
+By completing this tutorial, you will learn:
+
+- **Raycast Sensors**: Implement distance sensors for obstacle detection
+- **Neuroevolution**: Train autonomous agents through genetic algorithms
+- **State-Action Mapping**: Connect sensor inputs to steering/acceleration outputs
+- **Fitness Shaping**: Design rewards that encourage track completion
+- **Population-Based Training**: Parallelize learning across multiple agents
+- **Checkpoint Systems**: Save and resume evolutionary progress
 
 ## 📚 Learn the Theory
 
