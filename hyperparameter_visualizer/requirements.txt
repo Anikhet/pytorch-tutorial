@@ -1,0 +1,12 @@
+# Hyperparameter Tuning Visualizer
+# Interactive training with real-time visualization
+
+# Core ML
+torch>=2.0.0
+
+# UI
+gradio>=4.0.0
+
+# Visualization
+matplotlib>=3.7.0
+numpy>=1.24.0
