@@ -1,0 +1,14 @@
+# Core ML
+torch>=2.0.0
+torchvision>=0.15.0
+
+# UI
+gradio>=4.0.0
+
+# Visualization
+matplotlib>=3.7.0
+numpy>=1.24.0
+pillow>=9.0.0
+
+# Semantic direction finding
+scikit-learn>=1.2.0

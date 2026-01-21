@@ -16,14 +16,21 @@ from plotly.subplots import make_subplots
 import pandas as pd
 import numpy as np
 import torch
-import time
-import threading
+from typing import Dict, Any, Optional
 
 from neural_network import MonitoredMLP, MonitoredCNN
+
 from training_monitor import (
     TrainingMonitor, TrainingHistory,
     create_spiral_loaders, create_mnist_loaders
 )
+
+# Constants for dead neuron detection
+DEAD_NEURON_THRESHOLD = 1e-6
+DEAD_NEURON_PERCENTAGE_THRESHOLD = 10.0
+MIN_WEIGHT_STD_THRESHOLD = 1e-5
+MAX_ANIMATION_FRAMES = 20
+ANIMATION_DURATION_MS = 300
 
 
 # Page configuration
@@ -104,7 +111,7 @@ def create_batch_loss_chart(history: TrainingHistory) -> go.Figure:
 
         # Add moving average
         if len(history.batch_losses) > 10:
-            window = min(50, len(history.batch_losses) // 5)
+            window = max(1, min(50, len(history.batch_losses) // 5))
             ma = pd.Series(history.batch_losses).rolling(window=window).mean()
             fig.add_trace(go.Scatter(
                 y=ma,
@@ -135,7 +142,7 @@ def create_gradient_norm_chart(history: TrainingHistory) -> go.Figure:
 
         # Add moving average
         if len(history.grad_norms) > 10:
-            window = min(50, len(history.grad_norms) // 5)
+            window = max(1, min(50, len(history.grad_norms) // 5))
             ma = pd.Series(history.grad_norms).rolling(window=window).mean()
             fig.add_trace(go.Scatter(
                 y=ma,
@@ -231,6 +238,362 @@ def create_weight_histogram(history: TrainingHistory) -> go.Figure:
         title='Weight Distributions by Layer',
         height=300
     )
+    return fig
+
+
+def detect_dead_neurons(history: TrainingHistory) -> Dict[str, Dict[str, Any]]:
+    """
+    Detect dead neurons by analyzing weight distributions.
+
+    A neuron is considered "dead" if its weights are stuck near zero
+    (absolute mean < threshold) across multiple snapshots.
+
+    Returns:
+        Dictionary mapping layer names to dead neuron statistics.
+    """
+    if not history.snapshots or len(history.snapshots) < 2:
+        return {}
+
+    dead_neuron_info: Dict[str, Dict[str, Any]] = {}
+
+    latest = history.snapshots[-1]
+    if latest.model_stats is None:
+        return {}
+
+    for layer_name, weights in latest.model_stats.weight_histograms.items():
+        near_zero_count = np.sum(np.abs(weights) < DEAD_NEURON_THRESHOLD)
+        total_weights = len(weights)
+        dead_percentage = (near_zero_count / total_weights) * 100 if total_weights > 0 else 0
+
+        weight_std = float(np.std(weights))
+        weight_mean = float(np.mean(np.abs(weights)))
+
+        is_problematic = (
+            dead_percentage > DEAD_NEURON_PERCENTAGE_THRESHOLD or
+            weight_std < MIN_WEIGHT_STD_THRESHOLD
+        )
+
+        dead_neuron_info[layer_name] = {
+            'dead_percentage': dead_percentage,
+            'near_zero_count': int(near_zero_count),
+            'total_weights': total_weights,
+            'weight_std': weight_std,
+            'weight_mean': weight_mean,
+            'is_problematic': is_problematic
+        }
+
+    return dead_neuron_info
+
+
+def create_weight_evolution_chart(
+    history: TrainingHistory,
+    selected_layer: Optional[str] = None
+) -> go.Figure:
+    """
+    Create animated weight distribution evolution chart.
+
+    Shows how weight distributions shift from initialization through
+    convergence using animated histogram frames.
+
+    Args:
+        history: Training history with snapshots
+        selected_layer: Specific layer to visualize (or None for first layer)
+
+    Returns:
+        Plotly figure with animation controls
+    """
+    snapshots_with_stats = [
+        s for s in history.snapshots
+        if s.model_stats is not None and s.model_stats.weight_histograms
+    ]
+
+    if not snapshots_with_stats:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="No weight data available yet",
+            xref="paper", yref="paper",
+            x=0.5, y=0.5, showarrow=False,
+            font=dict(size=16)
+        )
+        return fig
+
+    layer_names = list(snapshots_with_stats[0].model_stats.weight_histograms.keys())
+    if not layer_names:
+        return go.Figure()
+
+    if selected_layer is None or selected_layer not in layer_names:
+        selected_layer = layer_names[0]
+
+    sample_step = max(1, len(snapshots_with_stats) // MAX_ANIMATION_FRAMES)
+    sampled_snapshots = snapshots_with_stats[::sample_step]
+    if snapshots_with_stats[-1] not in sampled_snapshots:
+        sampled_snapshots.append(snapshots_with_stats[-1])
+
+    all_weights = []
+    for snapshot in sampled_snapshots:
+        weights = snapshot.model_stats.weight_histograms.get(selected_layer)
+        if weights is not None:
+            all_weights.extend(weights)
+
+    if not all_weights:
+        return go.Figure()
+
+    weight_min = np.percentile(all_weights, 1)
+    weight_max = np.percentile(all_weights, 99)
+    bin_edges = np.linspace(weight_min, weight_max, 51)
+
+    frames = []
+    for idx, snapshot in enumerate(sampled_snapshots):
+        weights = snapshot.model_stats.weight_histograms.get(selected_layer)
+        if weights is None:
+            continue
+
+        counts, _ = np.histogram(weights, bins=bin_edges)
+        bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+
+        frame = go.Frame(
+            data=[go.Bar(
+                x=bin_centers,
+                y=counts,
+                marker_color='steelblue',
+                marker_line_color='darkblue',
+                marker_line_width=0.5,
+                name=selected_layer
+            )],
+            name=f"epoch_{snapshot.epoch}_batch_{snapshot.batch}",
+            layout=go.Layout(
+                title=dict(
+                    text=f"Weight Distribution - {selected_layer}<br>"
+                         f"<sub>Epoch {snapshot.epoch}, Batch {snapshot.batch}</sub>"
+                )
+            )
+        )
+        frames.append(frame)
+
+    first_weights = sampled_snapshots[0].model_stats.weight_histograms.get(selected_layer)
+    first_counts, _ = np.histogram(first_weights, bins=bin_edges)
+    bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2
+
+    fig = go.Figure(
+        data=[go.Bar(
+            x=bin_centers,
+            y=first_counts,
+            marker_color='steelblue',
+            marker_line_color='darkblue',
+            marker_line_width=0.5,
+            name=selected_layer
+        )],
+        frames=frames
+    )
+
+    fig.update_layout(
+        title=f"Weight Distribution Evolution - {selected_layer}",
+        xaxis_title="Weight Value",
+        yaxis_title="Count",
+        height=400,
+        updatemenus=[
+            dict(
+                type="buttons",
+                showactive=False,
+                y=1.15,
+                x=0.5,
+                xanchor="center",
+                buttons=[
+                    dict(
+                        label="▶ Play",
+                        method="animate",
+                        args=[
+                            None,
+                            dict(
+                                frame=dict(duration=ANIMATION_DURATION_MS, redraw=True),
+                                fromcurrent=True,
+                                mode="immediate"
+                            )
+                        ]
+                    ),
+                    dict(
+                        label="⏸ Pause",
+                        method="animate",
+                        args=[
+                            [None],
+                            dict(
+                                frame=dict(duration=0, redraw=False),
+                                mode="immediate"
+                            )
+                        ]
+                    )
+                ]
+            )
+        ],
+        sliders=[
+            dict(
+                active=0,
+                yanchor="top",
+                xanchor="left",
+                currentvalue=dict(
+                    font=dict(size=12),
+                    prefix="Training Progress: ",
+                    visible=True,
+                    xanchor="center"
+                ),
+                pad=dict(b=10, t=50),
+                len=0.9,
+                x=0.05,
+                y=0,
+                steps=[
+                    dict(
+                        args=[
+                            [f"epoch_{s.epoch}_batch_{s.batch}"],
+                            dict(
+                                frame=dict(duration=ANIMATION_DURATION_MS, redraw=True),
+                                mode="immediate"
+                            )
+                        ],
+                        label=f"E{s.epoch}B{s.batch}",
+                        method="animate"
+                    )
+                    for s in sampled_snapshots
+                    if s.model_stats.weight_histograms.get(selected_layer) is not None
+                ]
+            )
+        ]
+    )
+
+    return fig
+
+
+def create_weight_evolution_comparison(history: TrainingHistory) -> go.Figure:
+    """
+    Create side-by-side comparison of initial vs final weight distributions.
+
+    Shows how distributions shifted from initialization to convergence.
+    """
+    snapshots_with_stats = [
+        s for s in history.snapshots
+        if s.model_stats is not None and s.model_stats.weight_histograms
+    ]
+
+    if len(snapshots_with_stats) < 2:
+        fig = go.Figure()
+        fig.add_annotation(
+            text="Need at least 2 snapshots for comparison",
+            xref="paper", yref="paper",
+            x=0.5, y=0.5, showarrow=False
+        )
+        return fig
+
+    initial_snapshot = snapshots_with_stats[0]
+    final_snapshot = snapshots_with_stats[-1]
+
+    layer_names = list(initial_snapshot.model_stats.weight_histograms.keys())
+    n_layers = len(layer_names)
+
+    if n_layers == 0:
+        return go.Figure()
+
+    fig = make_subplots(
+        rows=2, cols=n_layers,
+        subplot_titles=[f"{name} (Init)" for name in layer_names] +
+                       [f"{name} (Final)" for name in layer_names],
+        vertical_spacing=0.15,
+        horizontal_spacing=0.05
+    )
+
+    for i, layer_name in enumerate(layer_names):
+        init_weights = initial_snapshot.model_stats.weight_histograms.get(layer_name, [])
+        final_weights = final_snapshot.model_stats.weight_histograms.get(layer_name, [])
+
+        fig.add_trace(
+            go.Histogram(
+                x=init_weights, nbinsx=40,
+                marker_color='lightcoral',
+                name=f"{layer_name} Init",
+                showlegend=False
+            ),
+            row=1, col=i+1
+        )
+
+        fig.add_trace(
+            go.Histogram(
+                x=final_weights, nbinsx=40,
+                marker_color='steelblue',
+                name=f"{layer_name} Final",
+                showlegend=False
+            ),
+            row=2, col=i+1
+        )
+
+    fig.update_layout(
+        title=f"Weight Evolution: Epoch {initial_snapshot.epoch} → Epoch {final_snapshot.epoch}",
+        height=500,
+        showlegend=False
+    )
+
+    return fig
+
+
+def create_weight_statistics_evolution(history: TrainingHistory) -> go.Figure:
+    """
+    Create line chart showing weight statistics (mean, std) evolution over time.
+    """
+    snapshots_with_stats = [
+        s for s in history.snapshots
+        if s.model_stats is not None and s.model_stats.layer_stats
+    ]
+
+    if not snapshots_with_stats:
+        return go.Figure()
+
+    layer_names = list(snapshots_with_stats[0].model_stats.layer_stats.keys())
+    colors = px.colors.qualitative.Plotly
+
+    fig = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=["Weight Mean (absolute)", "Weight Std Dev"]
+    )
+
+    for idx, layer_name in enumerate(layer_names):
+        epochs = []
+        weight_means = []
+        weight_stds = []
+
+        for snapshot in snapshots_with_stats:
+            stats = snapshot.model_stats.layer_stats.get(layer_name)
+            if stats:
+                epochs.append(snapshot.epoch + snapshot.batch / 100)
+                weight_means.append(abs(stats.weight_mean))
+                weight_stds.append(stats.weight_std)
+
+        color = colors[idx % len(colors)]
+
+        fig.add_trace(
+            go.Scatter(
+                x=epochs, y=weight_means,
+                mode='lines', name=layer_name,
+                line=dict(color=color),
+                showlegend=True
+            ),
+            row=1, col=1
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=epochs, y=weight_stds,
+                mode='lines', name=layer_name,
+                line=dict(color=color),
+                showlegend=False
+            ),
+            row=1, col=2
+        )
+
+    fig.update_layout(
+        title="Weight Statistics Over Training",
+        height=350,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02)
+    )
+    fig.update_xaxes(title_text="Training Progress (Epoch)", row=1, col=1)
+    fig.update_xaxes(title_text="Training Progress (Epoch)", row=1, col=2)
+
     return fig
 
 
@@ -492,14 +855,74 @@ def main():
     with col2:
         st.plotly_chart(create_gradient_norm_chart(history), use_container_width=True)
 
-    # Histograms
+    # Histograms and Weight Evolution
     st.subheader("📊 Distribution Analysis")
-    tab1, tab2 = st.tabs(["Gradient Distributions", "Weight Distributions"])
+    tab1, tab2, tab3 = st.tabs([
+        "Gradient Distributions",
+        "Weight Distributions",
+        "Weight Evolution"
+    ])
 
     with tab1:
         st.plotly_chart(create_gradient_histogram(history), use_container_width=True)
+
     with tab2:
         st.plotly_chart(create_weight_histogram(history), use_container_width=True)
+
+        # Dead neuron detection
+        dead_neuron_info = detect_dead_neurons(history)
+        if dead_neuron_info:
+            has_issues = any(info['is_problematic'] for info in dead_neuron_info.values())
+            if has_issues:
+                st.warning("Dead Neuron Warning: Some layers show signs of dead neurons")
+
+            with st.expander("Dead Neuron Analysis", expanded=has_issues):
+                cols = st.columns(len(dead_neuron_info))
+                for i, (layer_name, info) in enumerate(dead_neuron_info.items()):
+                    with cols[i]:
+                        status_icon = "⚠️" if info['is_problematic'] else "✓"
+                        st.markdown(f"**{status_icon} {layer_name}**")
+                        st.caption(f"Near-zero: {info['dead_percentage']:.2f}%")
+                        st.caption(f"Std Dev: {info['weight_std']:.6f}")
+                        if info['is_problematic']:
+                            st.error("Potential dead neurons detected")
+
+    with tab3:
+        st.markdown("*Animated visualization of how weight distributions evolve during training*")
+
+        # Layer selector for animation
+        if history.snapshots:
+            latest = history.snapshots[-1]
+            if latest.model_stats and latest.model_stats.weight_histograms:
+                layer_names = list(latest.model_stats.weight_histograms.keys())
+                selected_layer = st.selectbox(
+                    "Select Layer",
+                    options=layer_names,
+                    key="weight_evolution_layer"
+                )
+
+                # Animated weight evolution chart
+                st.plotly_chart(
+                    create_weight_evolution_chart(history, selected_layer),
+                    use_container_width=True
+                )
+
+                # Weight statistics evolution
+                st.plotly_chart(
+                    create_weight_statistics_evolution(history),
+                    use_container_width=True
+                )
+
+                # Initial vs Final comparison
+                st.subheader("Initialization vs Convergence")
+                st.plotly_chart(
+                    create_weight_evolution_comparison(history),
+                    use_container_width=True
+                )
+            else:
+                st.info("Train the model to see weight evolution visualizations")
+        else:
+            st.info("Train the model to see weight evolution visualizations")
 
     # Architecture and stats
     col1, col2 = st.columns([1, 1])
@@ -535,7 +958,9 @@ def main():
         **Tips:**
         - Watch for diverging train/val loss (overfitting)
         - Check gradient norms for exploding/vanishing gradients
-        - Use histograms to spot dead neurons (all zeros)
+        - Use Weight Evolution tab to watch distributions shift from initialization to convergence
+        - Dead neuron warnings appear when weights are stuck near zero (>10% or std < 1e-5)
+        - Play the animation to see how weight distributions change through training epochs
         """
     )
 
