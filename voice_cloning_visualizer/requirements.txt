@@ -1,0 +1,20 @@
+# Voice Cloning Visualizer
+# Real-time audio feature visualization
+
+# Audio Processing
+librosa>=0.10.0
+soundfile>=0.12.0
+
+# Optional: Live recording (may need portaudio)
+# sounddevice>=0.4.6
+
+# Visualization
+pygame>=2.5.0
+matplotlib>=3.7.0
+numpy>=1.24.0
+
+# Deep Learning (for embeddings)
+torch>=2.0.0
+
+# Signal Processing
+scipy>=1.10.0
