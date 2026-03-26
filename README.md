@@ -157,7 +157,44 @@ This tutorial is structured as a progressive learning journey. Each notebook bui
     - Safe deployment (Canary, Blue-Green, A/B testing)
     - Production MLOps checklist
 
-**Total Estimated Time: 28-35 hours**
+### Edge ML & On-Device AI (2026)
+
+25. **46_Edge_ML_Fundamentals.ipynb** (~1 hour)
+    - What is Edge ML and why it matters
+    - The size problem: profiling models for edge
+    - Edge-friendly architectures (MobileNet, depthwise separable convolutions)
+    - Hardware landscape: phones, Raspberry Pi, Jetson, microcontrollers
+
+26. **47_Making_Models_Smaller.ipynb** (~1.5 hours)
+    - Pruning: removing unnecessary weights
+    - Knowledge Distillation: training small models to mimic big ones
+    - Quantization: FP32 to INT8 compression
+    - Full compression pipeline: prune + distill + quantize
+
+27. **48_Deploying_Models_to_Edge.ipynb** (~1.5 hours)
+    - torch.export: the new standard (replaces TorchScript)
+    - ONNX export and ONNX Runtime inference
+    - ExecuTorch overview (PyTorch's official edge solution, 1.0 GA)
+    - Which format for which platform
+
+28. **49_On_Device_LLMs_for_Beginners.ipynb** (~1.5 hours)
+    - Small Language Models (SLMs): SmolLM2, Gemma, Phi-4-mini
+    - INT4 quantization for on-device LLMs
+    - KV cache management under memory constraints
+    - Building and running a tiny transformer locally
+
+29. **50_Federated_Learning_Basics.ipynb** (~1.5 hours)
+    - Federated learning: training without sharing data
+    - FedAvg algorithm from scratch
+    - Non-IID data challenges
+    - Differential privacy basics
+
+### Hands-On Projects
+
+- **edge_image_classifier/** - Full edge ML pipeline: train, distill, prune, quantize, export
+- **federated_learning_sim/** - Federated learning simulator with differential privacy
+
+**Total Estimated Time: 35-42 hours**
 
 ## 🚀 Getting Started
 
