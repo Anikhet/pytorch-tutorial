@@ -2,197 +2,120 @@
 
 Welcome to a comprehensive PyTorch tutorial designed for complete beginners to deep learning! This tutorial series will guide you from the basics of tensors to building and training your own neural networks.
 
+## 📁 Repository Structure
+
+```
+notebooks/
+├── 01-fundamentals/     8 notebooks  (~7 hours)   Core PyTorch skills
+├── 02-intermediate/     6 notebooks  (~9 hours)   Transformers, diffusion, RL
+├── 03-deployment/      10 notebooks  (~10 hours)  Production ML & MLOps
+├── 04-advanced/        23 notebooks  (~12 hours)  Specialized & cutting-edge
+└── 05-edge-ml/          5 notebooks  (~7 hours)   On-device AI & privacy
+
+projects/                16 hands-on projects with standalone code & demos
+```
+
 ## 📚 Learning Path
 
 This tutorial is structured as a progressive learning journey. Each notebook builds upon the previous one, so it's recommended to follow them in order.
 
-### Notebook Overview
+### 01-fundamentals/ — Core PyTorch (~7 hours)
 
-1. **00_Introduction_and_Tensors.ipynb** (~1 hour)
-   - Setting up your environment
-   - Understanding what PyTorch is
-   - Tensor basics: creation, operations, and manipulation
-   - Data types and device management
+| # | Notebook | Time | Topics |
+|---|----------|------|--------|
+| 00 | Introduction and Tensors | ~1 hr | Setup, tensor basics, data types, device management |
+| 01 | Autograd and Gradients | ~45 min | Automatic differentiation, backpropagation |
+| 02 | Building Neural Networks | ~1 hr | `nn.Module`, activation functions, custom networks |
+| 03 | Training Your First Model | ~1.5 hrs | Training loops, loss functions, optimizers |
+| 04 | Practical Example: Regression | ~1 hr | Data preprocessing, continuous value prediction |
+| 05 | Practical Example: Image Classification | ~1.5 hrs | CNNs, MNIST, classification metrics |
+| 06 | Advanced Topics and Best Practices | ~1 hr | Save/load, GPU, transfer learning, debugging |
+| 07 | Working with Real Data | ~1 hr | Custom datasets, DataLoaders, augmentation |
 
-2. **01_Autograd_and_Gradients.ipynb** (~45 minutes)
-   - Automatic differentiation explained
-   - Understanding gradients and backpropagation
-   - Computing gradients manually and automatically
-   - Common gradient operations
+### 02-intermediate/ — Modern Architectures (~9 hours)
 
-3. **02_Building_Neural_Networks.ipynb** (~1 hour)
-   - Introduction to neural network layers
-   - Using `nn.Module` to build networks
-   - Activation functions and their purposes
-   - Building your first custom network
+| # | Notebook | Time | Topics |
+|---|----------|------|--------|
+| 08 | Optimization and Tuning | ~1 hr | LR schedulers, dropout, batch norm, early stopping |
+| 09 | Transformers and Attention | ~1.5 hrs | Self-attention, transformer architecture, tokenization |
+| 10 | Large Models and Fine-Tuning | ~1.5 hrs | Hugging Face, LoRA, 4/8-bit quantization |
+| 11 | Multimodal CLIP | ~1.5 hrs | Vision-language models, contrastive learning |
+| 12 | Generative Diffusion | ~2 hrs | DDPM, U-Net denoising, image generation |
+| 13 | Reinforcement Learning | ~1.5 hrs | Policy gradients, Q-learning, training agents |
 
-4. **03_Training_Your_First_Model.ipynb** (~1.5 hours)
-   - Complete training loop implementation
-   - Loss functions and optimizers
-   - Training vs validation
-   - Evaluation metrics and model assessment
+### 03-deployment/ — Production ML & MLOps (~10 hours)
 
-5. **04_Practical_Example_Regression.ipynb** (~1 hour)
-   - Real-world regression problem
-   - Data preprocessing and preparation
-   - Training a model to predict continuous values
-   - Visualizing results and understanding predictions
+| # | Notebook | Time | Topics |
+|---|----------|------|--------|
+| 14 | Model Deployment | ~2 hrs | TorchScript, ONNX, vLLM, TensorRT-LLM, FastAPI |
+| 15 | Distributed Training | ~1.5 hrs | DDP, FSDP, multi-GPU training |
+| 16 | Performance Engineering | ~1.5 hrs | Mixed precision, gradient accumulation, profiling |
+| 17 | Graph Neural Networks | ~1.5 hrs | Message passing, graph convolutions |
+| 18 | RAG and Agents | ~2 hrs | Retrieval augmented generation, ReAct pattern |
+| 19 | RLHF and Alignment | ~1.5 hrs | Reward modeling, PPO, safety techniques |
+| 20 | Quantization and Efficiency | ~1.5 hrs | INT8/INT4, model compression, LoRA/QLoRA |
+| 21 | Modern LLM Inference Optimization | ~2 hrs | KV cache, speculative decoding, PagedAttention |
+| 22 | Streaming ML Inference | ~2 hrs | Kafka, feature stores, training-serving skew |
+| 23 | Production Inference Patterns | ~2 hrs | FTI pipelines, cost optimization, safe deployment |
 
-6. **05_Practical_Example_Image_Classification.ipynb** (~1.5 hours)
-   - Working with image data
-   - Convolutional Neural Networks (CNNs)
-   - Training on MNIST dataset
-   - Evaluating classification performance
+### 04-advanced/ — Specialized Topics (~12 hours)
 
-7. **06_Advanced_Topics_and_Best_Practices.ipynb** (~1 hour)
-   - Saving and loading models
-   - Using GPU for faster training
-   - Transfer learning basics
-   - Debugging tips and common pitfalls
+| # | Notebook | Time | Topics |
+|---|----------|------|--------|
+| 24 | Vector Databases and Similarity Search | ~1.5 hrs | Vector embeddings, similarity search |
+| 25 | Production REST APIs | ~1.5 hrs | FastAPI, deployment patterns |
+| 26 | ML Pipeline Orchestration | ~1.5 hrs | Pipeline automation, workflows |
+| 27 | Monitoring and Observability | ~1.5 hrs | Model monitoring, drift detection |
+| 28 | LLM Evaluation and Guardrails | ~1.5 hrs | Evaluation metrics, safety guardrails |
+| 29 | ML System Design Patterns | ~1.5 hrs | Architecture patterns, design decisions |
+| 30 | Responsible AI and Fairness | ~1 hr | Bias detection, fairness metrics |
+| 31 | Advanced Agentic Systems | ~1.5 hrs | Complex agent architectures |
+| 32 | Kubernetes ML Infrastructure | ~1.5 hrs | K8s deployment, MLOps |
+| 33 | ML Testing Strategies | ~1 hr | Unit, integration, E2E testing for ML |
+| 34 | Multimodal Production Systems | ~1.5 hrs | Multi-modal deployment |
+| 35 | Autoencoders and VAEs | ~1.5 hrs | Unsupervised learning, variational autoencoders |
+| 36 | Genetic Algorithms and Neuroevolution | ~1.5 hrs | Evolutionary algorithms |
+| 37 | Audio and Speech Processing | ~1.5 hrs | Speech recognition, audio tasks |
+| 38 | Neural Radiance Fields | ~1.5 hrs | NeRF, 3D representations |
+| 39 | Neural Cellular Automata | ~1 hr | Self-organizing patterns |
+| 40 | Reward Modeling and PPO for LLMs | ~1.5 hrs | Reward models, PPO training |
+| 41 | Advanced Preference Optimization | ~1.5 hrs | DPO, GRPO, preference learning |
+| 42 | Coding Agents from Scratch | ~2 hrs | Building code-generation agents |
+| 43 | LLM Eval Harness Engineering | ~1.5 hrs | Evaluation infrastructure |
+| 44 | Synthetic Data Generation for LLMs | ~1.5 hrs | Synthetic data creation |
+| 45 | Music Generation Models | ~1.5 hrs | Music/audio generation |
+| — | Hunyuan3D Image to 3D (bonus) | ~1 hr | 3D generation from images |
 
-8. **07_Working_with_Real_Data.ipynb** (~1 hour)
-   - Custom Datasets and DataLoaders
-   - Handling CSV and Image data
-   - Data augmentation and transforms
-   - Organizing data for training
+### 05-edge-ml/ — On-Device AI & Privacy (~7 hours)
 
-9. **08_Optimization_and_Tuning.ipynb** (~1 hour)
-   - Learning Rate Schedulers
-   - Regularization (Dropout, Weight Decay)
-   - Batch Normalization
-   - Early Stopping strategies
+| # | Notebook | Time | Topics |
+|---|----------|------|--------|
+| 46 | Edge ML Fundamentals | ~1 hr | What is edge ML, model profiling, hardware landscape |
+| 47 | Making Models Smaller | ~1.5 hrs | Pruning, knowledge distillation, quantization pipeline |
+| 48 | Deploying Models to Edge | ~1.5 hrs | torch.export, ONNX, ExecuTorch (1.0 GA) |
+| 49 | On-Device LLMs for Beginners | ~1.5 hrs | SLMs, INT4 quantization, tiny transformers |
+| 50 | Federated Learning Basics | ~1.5 hrs | FedAvg, non-IID data, differential privacy |
 
-10. **09_Transformers_and_Attention.ipynb** (~1.5 hours)
-    - Understanding Self-Attention
-    - The Transformer architecture
-    - Implementing attention from scratch
-    - Tokenization basics
+### projects/ — Hands-On Projects
 
-11. **10_Large_Models_and_FineTuning.ipynb** (~1.5 hours)
-    - Loading pre-trained LLMs (Hugging Face)
-    - Parameter-Efficient Fine-Tuning (LoRA)
-    - Quantization (4-bit/8-bit loading)
-    - Adapting models to specific tasks
-
-12. **11_Multimodal_CLIP.ipynb** (~1.5 hours)
-    - Vision-Language Models
-    - Contrastive Learning (InfoNCE Loss)
-    - Building Dual Encoders
-    - Zero-Shot Classification
-
-13. **12_Generative_Diffusion.ipynb** (~2 hours)
-    - Denoising Diffusion Probabilistic Models (DDPM)
-    - Forward Process (Gaussian Noise)
-    - Reverse Process (U-Net Denoising)
-    - Generating images from noise
-
-14. **13_Reinforcement_Learning.ipynb** (~1.5 hours)
-    - RL fundamentals
-    - Policy gradients
-    - Q-learning with PyTorch
-    - Training agents in environments
-
-15. **14_Model_Deployment.ipynb** (~2 hours)
-    - TorchScript and ONNX export
-    - Batch vs Online inference patterns
-    - Modern serving frameworks (vLLM, TensorRT-LLM)
-    - FastAPI integration
-    - Production deployment strategies
-
-16. **15_Distributed_Training.ipynb** (~1.5 hours)
-    - Data Parallelism (DDP)
-    - Model Parallelism (FSDP)
-    - Multi-GPU training
-    - Distributed training best practices
-
-17. **16_Performance_Engineering.ipynb** (~1.5 hours)
-    - Mixed precision training (AMP)
-    - Gradient accumulation
-    - Performance profiling
-    - Memory optimization
-
-18. **17_Graph_Neural_Networks.ipynb** (~1.5 hours)
-    - GNN fundamentals
-    - Message passing networks
-    - Graph convolutions
-    - Applications
-
-19. **18_RAG_and_Agents.ipynb** (~2 hours)
-    - Retrieval Augmented Generation (RAG)
-    - Vector embeddings and search
-    - Building AI agents
-    - ReAct pattern implementation
-
-20. **19_RLHF_and_Alignment.ipynb** (~1.5 hours)
-    - Reinforcement Learning from Human Feedback
-    - Reward modeling
-    - PPO for LLM alignment
-    - Safety and alignment techniques
-
-21. **20_Quantization_and_Efficiency.ipynb** (~1.5 hours)
-    - INT8/INT4 quantization
-    - Model compression techniques
-    - Efficiency optimization
-    - Mobile deployment
-
-22. **21_Modern_LLM_Inference_Optimization.ipynb** (~2 hours) 🆕
-    - KV cache optimization and quantization
-    - Speculative decoding (2-3x speedup)
-    - PagedAttention and continuous batching
-    - vLLM and TensorRT-LLM deployment
-    - Production inference techniques
-
-23. **22_Streaming_ML_Inference.ipynb** (~2 hours) 🆕
-    - Real-time inference with Apache Kafka
-    - Feature stores (Feast integration)
-    - Training-serving skew prevention
-    - Embedded vs Enricher patterns
-    - Production monitoring
-
-24. **23_Production_Inference_Patterns.ipynb** (~2 hours) 🆕
-    - Feature/Training/Inference (FTI) pipelines
-    - Batch vs Online inference decision framework
-    - Cost optimization strategies (inference = 90% of costs!)
-    - Model monitoring and drift detection
-    - Safe deployment (Canary, Blue-Green, A/B testing)
-    - Production MLOps checklist
-
-### Edge ML & On-Device AI (2026)
-
-25. **46_Edge_ML_Fundamentals.ipynb** (~1 hour)
-    - What is Edge ML and why it matters
-    - The size problem: profiling models for edge
-    - Edge-friendly architectures (MobileNet, depthwise separable convolutions)
-    - Hardware landscape: phones, Raspberry Pi, Jetson, microcontrollers
-
-26. **47_Making_Models_Smaller.ipynb** (~1.5 hours)
-    - Pruning: removing unnecessary weights
-    - Knowledge Distillation: training small models to mimic big ones
-    - Quantization: FP32 to INT8 compression
-    - Full compression pipeline: prune + distill + quantize
-
-27. **48_Deploying_Models_to_Edge.ipynb** (~1.5 hours)
-    - torch.export: the new standard (replaces TorchScript)
-    - ONNX export and ONNX Runtime inference
-    - ExecuTorch overview (PyTorch's official edge solution, 1.0 GA)
-    - Which format for which platform
-
-28. **49_On_Device_LLMs_for_Beginners.ipynb** (~1.5 hours)
-    - Small Language Models (SLMs): SmolLM2, Gemma, Phi-4-mini
-    - INT4 quantization for on-device LLMs
-    - KV cache management under memory constraints
-    - Building and running a tiny transformer locally
-
-29. **50_Federated_Learning_Basics.ipynb** (~1.5 hours)
-    - Federated learning: training without sharing data
-    - FedAvg algorithm from scratch
-    - Non-IID data challenges
-    - Differential privacy basics
-
-### Hands-On Projects
-
-- **edge_image_classifier/** - Full edge ML pipeline: train, distill, prune, quantize, export
-- **federated_learning_sim/** - Federated learning simulator with differential privacy
+| Project | Description |
+|---------|-------------|
+| `edge_image_classifier/` | Full edge ML pipeline: train, distill, prune, quantize, export |
+| `federated_learning_sim/` | Federated learning simulator with differential privacy |
+| `racing_car_rl/` | Genetic algorithm car racing |
+| `coding_agent/` | Code generation agent |
+| `bohemian_rhapsody_ai/` | AI music generation |
+| `flappy_bird_ai/` | Game AI with reinforcement learning |
+| `nerf_lite/` | Neural Radiance Fields for 3D |
+| `neural_cellular_automata/` | Self-organizing NCA patterns |
+| `sketch_to_image_diffusion/` | Conditional image generation |
+| `voice_cloning_visualizer/` | Voice cloning tools |
+| `attention_flow_viz/` | Attention mechanism visualization |
+| `ball_balancer_3d/` | 3D ball balancing simulation |
+| `hyperparameter_visualizer/` | Hyperparameter tuning visualization |
+| `latent_space_navigator/` | Interactive latent space exploration |
+| `live_training_dashboard/` | Real-time training monitoring |
+| `loss_landscape_explorer/` | Loss landscape visualization |
 
 **Total Estimated Time: 35-42 hours**
 
@@ -223,7 +146,7 @@ This tutorial is structured as a progressive learning journey. Each notebook bui
    ```
 
 4. **Open the notebooks in order:**
-   - Start with `00_Introduction_and_Tensors.ipynb`
+   - Start with `notebooks/01-fundamentals/00_Introduction_and_Tensors.ipynb`
    - Work through each notebook sequentially
    - Complete the exercises in each notebook before moving on
 
@@ -240,35 +163,32 @@ This tutorial is structured as a progressive learning journey. Each notebook bui
 By the end of this tutorial, you will be able to:
 
 **Core PyTorch Skills:**
-- ✅ Create and manipulate tensors in PyTorch
-- ✅ Understand automatic differentiation and gradients
-- ✅ Build neural networks using PyTorch's `nn.Module`
-- ✅ Train models using proper training loops
-- ✅ Evaluate model performance
-- ✅ Apply PyTorch to real-world problems (regression and classification)
-- ✅ Save/load models and use GPU acceleration
+- Create and manipulate tensors in PyTorch
+- Understand automatic differentiation and gradients
+- Build neural networks using PyTorch's `nn.Module`
+- Train models using proper training loops
+- Apply PyTorch to real-world problems (regression and classification)
 
 **Advanced Topics:**
-- ✅ Understand best practices for PyTorch development
-- ✅ Handle custom datasets and data pipelines
-- ✅ Optimize model performance with advanced techniques
-- ✅ Understand Transformers and Attention mechanisms
-- ✅ Fine-tune Large Language Models (LLMs) efficiently
-- ✅ Build Multimodal (Vision+Text) models like CLIP
-- ✅ Understand and implement Generative Diffusion models
-- ✅ Work with Graph Neural Networks
-- ✅ Build RAG systems and AI agents
+- Understand Transformers and Attention mechanisms
+- Fine-tune Large Language Models (LLMs) efficiently
+- Build Multimodal (Vision+Text) models like CLIP
+- Implement Generative Diffusion models
+- Build RAG systems and AI agents
 
-**Production ML & MLOps (2025 Standards):**
-- ✅ Optimize LLM inference with KV caching, speculative decoding, and continuous batching
-- ✅ Deploy models with modern frameworks (vLLM, TensorRT-LLM)
-- ✅ Build real-time streaming ML systems with Kafka
-- ✅ Prevent training-serving skew with feature stores
-- ✅ Choose between batch vs online inference correctly
-- ✅ Monitor models for drift and performance degradation
-- ✅ Optimize inference costs (90% of production ML expenses!)
-- ✅ Deploy safely with canary, blue-green, and A/B testing
-- ✅ Understand FTI (Feature/Training/Inference) pipeline architecture
+**Production ML & MLOps:**
+- Optimize LLM inference with KV caching, speculative decoding, and continuous batching
+- Deploy models with modern frameworks (vLLM, TensorRT-LLM)
+- Build real-time streaming ML systems with Kafka
+- Monitor models for drift and performance degradation
+- Deploy safely with canary, blue-green, and A/B testing
+
+**Edge ML & On-Device AI:**
+- Profile and optimize models for edge devices
+- Compress models with pruning, distillation, and quantization
+- Export models to ONNX, ExecuTorch, and CoreML
+- Run small language models on-device
+- Implement federated learning with differential privacy
 
 ## 💡 Tips for Success
 
@@ -293,15 +213,6 @@ By the end of this tutorial, you will be able to:
 - [PyTorch Tutorials](https://pytorch.org/tutorials/)
 - [Deep Learning Book](https://www.deeplearningbook.org/) - For deeper theoretical understanding
 
-## 🤝 Contributing
-
-Feel free to experiment, modify, and extend these notebooks for your own learning!
-
 ## 📝 License
 
 This tutorial is provided for educational purposes. Feel free to use and modify as needed.
-
----
-
-**Happy Learning! 🎉**
-
